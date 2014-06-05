@@ -44,6 +44,9 @@
 					<h3>With Puppet</h3>
 				</section>
 				<section>
+					<h1>Why?</h1>
+				</section>
+				<section>
 					<h1>Snowflake server</h1>
 					<p><a href="http://martinfowler.com/bliki/SnowflakeServer.html">definition</a>
 				</section>
@@ -220,22 +223,59 @@ group { 'apache':
 					<section>
 						<h1>Host</h1>
 						<p>/etc/host entry</p>
+<pre><code data-trim contenteditable>
+host { 'ntpserver.example.com':
+    ip           => '10.100.10.50',
+    host_aliases => 'timeserver',
+}
+</code></pre>
 					</section>
 					<section>
 						<h1>Cron</h1>
 						<p>/etc/crontab entry</p>
+<pre><code data-trim contenteditable>
+cron { "backup cronjob":
+  command => "/opt/myapp/backup",
+  user    => root,
+  hour    => 2,
+  minute  => 0
+}
+</code></pre>
 					</section>
 					<section>
 						<h1>Mount</h1>
 						<p>/etc/fstab entry</p>
+<pre><code data-trim contenteditable>
+mount { "/data":
+    ensure  => "mounted",
+    device  => "/dev/sdb1",
+    fstype  => "ext4",
+    options => "defaults",
+    atboot  => "true",
+ }
+</code></pre>
 					</section>
 					<section>
 						<h1>Tidy</h1>
 						<p>remove unwanted file by age/size</p>
+<pre><code data-trim contenteditable>
+tidy { "tidy log logfiles":
+    path    => "/var/log/myapp",
+    age     => "60d",
+    backup  => false,
+    matches => [ "*.log" ],
+}
+</code></pre>
 					</section>
 					<section>
 						<h1>Exec</h1>
 						<p>execute external commands</p>
+<pre><code data-trim contenteditable>
+exec { "untar dem-rules":
+    command => "tar xvpf /tmp/dem-rules-$version.tar.gz -C /opt/dem/rules",
+    path    => '/bin',
+}
+</code></pre>
 					</section>
 				</section>
 				<section>
