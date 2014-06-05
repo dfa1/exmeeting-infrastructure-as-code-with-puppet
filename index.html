@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<title>Infrastructure as code with Puppet</title>
+		<meta name="description" content="Puppet introduction">
+		<meta name="author" content="Davide Angelocola">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Infrastructure<br/> as<br/> Code</h1>
+					<h3>With Puppet</h3>
+				</section>
+				<section>
+					<h1>Software Configuration Management</h1>
+				</section>
+				<section>
+					<h1>Snowflake server</h1>
+					<h3>upgrades, new packages, remove old packages, configuration</h3>
+					<h3>command line, editing text files, restarting (some servives)</h3>
+					<h3>clustering is impossible</h3>
+					<h3>cannot be changed easily</h3>
+				</section>
+				<section>
+					<h1>Automation</h1>
+					<h3>Reproducible</h3>
+					<h3>Reproducible</h3>
+					<h3>keep configuration as text files</h3>
+					<h3>enables version control</h3>
+					<h3>same artifact is copied into production</h3>
+				</section>
+				<section>
+					<h1>PhoenixServer</h1>
+				</section>
+				<section>
+					<h3>Augeas (C library + cmdline, XPath like)</h3>
+					<h1>Puppet</h1>
+					<h2>Chef</h2>
+					<h2>Salt</h2>
+					<h2>cfengine</h2>
+					<h3>fabric (python library)</h3>
+					<h3>pallet (clojure library)</h3>
+				</section>
+				<section>
+					<h1>Why Puppet?</h1>
+				</section>
+				<section>
+					<h1>Open source</h1>
+					<p>Apache License</p>
+				</section>
+				<section>
+					<h1>Windows Support</h1>
+				</section>
+				<section>
+					<h1>Cisco Router/Switch support</h1>
+				</section>
+				<section>
+					<h1>Declared state</h1>
+					<h2>vs</h2>
+					<h1>Actual state</h1>
+				</section>
+				<section>
+					<h1>Idempotence</h1>
+				</section>
+				<section>
+					<h1>Incremental</h1>
+				</section>
+				<section>
+					<h1>Manifest</h1>
+				</section>
+				<section>
+					<h1>Architecture</h1>
+					<ul>
+						<li>client/server: master + agent on nodes + CA</li>
+						<li>stand-alone: masterless, agentless</li>
+					</ul>
+				</section>
+				<section>
+					<h1>Stand-alone</h1>
+					<ul>
+						<li>puppet binary</li>
+						<li>manifests copied locally</li>
+						<li>ssh connection</li>
+					</ul>
+				</section>
+				<section>
+<pre><code class=bash data-trim contenteditable>
+$ ./scripts/puppet-apply.sh 192.168.0.15
+Notice: Compiled catalog for pinocchio in environment production in 0.70 seconds
+Notice: /Stage[main]/Httpd/Service[httpd]/ensure: ensure changed 'stopped' to 'running'
+Notice: /Stage[main]/Ntpd/Service[ntpd]/ensure: ensure changed 'stopped' to 'running'
+Notice: Finished catalog run in 0.75 seconds
+OK.
+</code></pre>
+				</section>
+				<section>
+					<h1>Declarative Language</h1>
+				</section>
+				<section>
+<pre><code class=bash data-trim contenteditable>
+#/bin/bash
+set -e
+mkdir -p /root/.ssh
+chmod 700 /root/.ssh
+KEY='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDaTYviDJNv69jDzPWSIZFO0o+O884PmfeXiuk1OM6EAkTWPhUr1vB5ucG9ia49qnHWKi2k6uTdfMe4/GxCXXfC+F9R6GGd0lcHOvKWoNs16ZnDuZRqaG+2Hcic/t3OagT3rzXGg7uxGK3IeWGO12uteieaA2MDAqRJCBv5oAhh3Vk1+XMrMKxy/oF5KL46hgcIAAF4nFhCaMlk0T/xio7SRBif2I8IhyDmBgx2Ffag2xZwsoiTeeBzdbRgVKa3uGcFqfVtRvDfV92whB68J9DkRYsUE6AaWEAeL5NiIfiXAb9nUkjMWef/QGEZWbdz9qG2+y9bEr5egfbR0rso2vNl laptop_key'
+echo $KEY > /root/.ssh/authorized_keys
+chmod 600 /root/.ssh/authorized_keys
+# yeah... it looks like ssh-copy-id
+</code></pre>
+<h1>vs</h1>
+<pre><code data-trim contenteditable>
+ssh_authorized_key { 'laptop_dfa':
+  ensure => present,
+  user   => 'root',
+  type   => 'ssh-rsa',
+  key    => 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDaTYviDJNv69jDzPWSIZFO0o+O884PmfeXiuk1OM6EAkTWPhUr1vB5ucG9ia49qnHWKi2k6uTdfMe4/GxCXXfC+F9R6GGd0lcHOvKWoNs16ZnDuZRqaG+2Hcic/t3OagT3rzXGg7uxGK3IeWGO12uteieaA2MDAqRJCBv5oAhh3Vk1+XMrMKxy/oF5KL46hgcIAAF4nFhCaMlk0T/xio7SRBif2I8IhyDmBgx2Ffag2xZwsoiTeeBzdbRgVKa3uGcFqfVtRvDfV92whB68J9DkRYsUE6AaWEAeL5NiIfiXAb9nUkjMWef/QGEZWbdz9qG2+y9bEr5egfbR0rso2vNl'
+}
+</code></pre>
+				</section>
+				<section>
+					<h1>Resource</h1>
+<pre><code data-trim contenteditable>
+# comment
+type { title:
+    key1 => value1,
+    key2 => value2,
+}
+</code></pre>
+				</section>
+				<section>
+					<h1>File</h1>
+<pre><code data-trim contenteditable>
+file { "/var/www/index.html":
+    ensure  => present,
+    owner   => 'apache',
+    group   => 'apache',
+    mode    => 0400,
+    content => "Hello world!",
+}
+
+file { "/var/www/":
+    ensure  => directory,
+    owner   => 'apache',
+    group   => 'apache',
+    mode    => 0700,
+}
+</code></pre>
+				</section>
+				<section>
+					<h1>Package</h1>
+<pre><code data-trim contenteditable>
+package { 'httpd-2.2':
+    ensure => installed,
+}
+
+package { 'nginx':
+    ensure => absent,
+}
+
+package { 'java':
+    ensure => latest,
+}
+</code></pre>
+				</section>
+				<section>
+					<h1>Service</h1>
+<pre><code data-trim contenteditable>
+service { 'httpd':
+    ensure => running,
+    enable => true,
+}
+
+service { 'iptables':
+    ensure => stopped,
+    enable => false,
+}
+</code></pre>
+				</section>
+				<section>
+					<section>
+						<h1>Other types</h1>
+						<p>* see <a href="http://docs.puppetlabs.com/references/latest/type.html">official type</a></p>
+					</section>
+					<section>
+						<h1>User</h1>
+<pre><code data-trim contenteditable>
+user { 'apache':
+    ensure => present,
+}
+</code></pre>
+					</section>
+					<section>
+						<h1>Group</h1>
+<pre><code data-trim contenteditable>
+group { 'apache':
+    ensure => present,
+}
+</code></pre>
+					</section>
+					<section>
+						<h1>Host</h1>
+						<p>/etc/host entry</p>
+					</section>
+					<section>
+						<h1>Cron</h1>
+						<p>/etc/crontab entry</p>
+					</section>
+					<section>
+						<h1>Mount</h1>
+						<p>/etc/fstab entry</p>
+					</section>
+					<section>
+						<h1>Tidy</h1>
+						<p>remove unwanted file by age/size</p>
+					</section>
+					<section>
+						<h1>Exec</h1>
+						<p>execute external commands</p>
+					</section>
+				</section>
+				<section>
+					<h1>Composition</h1>
+				</section>
+				<section>
+					<h1>Class</h1>
+<pre><code data-trim contenteditable>
+class httpd {
+
+    package { 'httpd':
+        ensure => installed,
+    }
+
+    service { 'httpd':
+        ensure => running,
+        enable => true,
+    }
+}
+
+include httpd
+</code></pre>
+				</section>
+				<section>
+					<h1>Define</h1>
+<pre><code data-trim contenteditable>
+define httpd::virtual_host($server_name) {
+    file { "/etc/httpd/conf.d/$server_name.conf":
+        ensure  => file,
+        owner   => root,
+        group   => root,
+        mode    => 400,
+        content => "# This file is managed by puppet
+<VirtualHost *:80>
+  DocumentRoot /var/www/$server_name
+  ServerName $server_name
+</VirtualHost>",
+    }
+}
+httpd::virtual_host { "my first virtualhost":
+    server_name => "www.example.com",
+}
+</code></pre>
+				</section>
+				<section>
+					<h1>Node</h1>
+					<p>the main()</p>
+<pre><code data-trim contenteditable>
+node 'pinocchio' {
+    include httpd
+    include httpd::enable_named_virtual_hosts
+
+    httpd::virtual_host { 'first virtual host':
+        server_name => 'cat',
+    }
+
+    httpd::virtual_host { 'second virtual host':
+        server_name => 'fox',
+    }
+}
+</code></pre>
+				</section>
+				<section>
+					<h1>Node regexp</h1>
+<pre><code data-trim contenteditable>
+node /^webserver-\d$/ {
+  include httpd
+}
+</code></pre>
+<p>* using ^$ is a best practice
+				</section>
+				<section>
+					<section>
+						<h1>Templating</h1>
+					</section>
+					<section>
+						<h1>variable expansion</h1>
+<pre><code data-trim contenteditable>
+define httpd::conf($precedence, $subsystem) {
+    file { "/etc/httpd/conf.d/$precedence-$subsystem.conf":
+        ensure  => present,
+        content => "# Configuring $subsystem",
+    }
+}
+
+httpd::conf { "configure my subsystem":
+    precedente => "100",
+    subsystem  => "ajp-proxy",
+}
+</code></pre>
+					</section>
+					<section>
+						<h1>ERB templates</h1>
+						<ul>
+							<li>if, loops, arbitrary ruby code</li>
+							<li>can be inlined</li>
+							<li>can be provided externally (local file, module, url)</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h1>Reusable modules</h1>
+					<p>checkout puppet forge</p>
+				</section>
+				<section>
+					<h1>Resources apply order</h1>
+					<p>* not specified</p>
+				</section>
+				<section>
+					<h1>Explicit dependencies</h1>
+<pre><code data-trim contenteditable>
+package { 'httpd':
+    ensure  => latest,
+}
+
+service { 'httpd':
+    ensure  => running,
+    enable  => true,
+    require => Package['httpd'],
+}
+</code></pre>
+				</section>
+				<section>
+					<section>
+						<h1>Reactive manifests</h1>
+					</section>
+					<section>
+						<h3>subscribe</h3>
+<pre><code data-trim contenteditable>
+package { 'httpd':
+    ensure  => latest,
+}
+
+service { 'httpd':
+    ensure    => running,
+    enable    => true,
+    subscribe => Package['httpd'],
+}
+</code></pre>
+					</section>
+					<section>
+						<h3>notify</h3>
+<pre><code data-trim contenteditable>
+package { 'httpd':
+    ensure => latest,
+    notify => Service['httpd'],
+}
+
+service { 'httpd':
+    ensure    => running,
+    enable    => true,
+}
+</code></pre>
+					</section>
+					<section>
+						<h3>bonus: implicit dependency</h3>
+<pre><code data-trim contenteditable>
+package { 'httpd':
+    ensure => latest,
+    notify => Service['httpd'],
+}
+
+service { 'httpd':
+    ensure    => running,
+    enable    => true,
+    # done for you:
+    # require => Package['httpd']
+}
+</code></pre>
+					</section>
+					<section>
+						<h3>bonus: multiple events</h3>
+<pre><code data-trim contenteditable>
+package { 'httpd':
+    ensure  => latest,
+}
+
+file { "/etc/httpd/conf.d/https.conf":
+    ensure => present,
+    alias  => "https.conf",
+    content => ...,
+}
+
+service { 'httpd':
+    ensure    => running,
+    enable    => true,
+    subscribe => [ Package['httpd'], File["https.conf"] ],
+}
+</code></pre>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h1>Inject configuration values</h1>
+					</section>
+					<section>
+						<h1>Option #1</h1>
+						<p>directly in manifest</p>
+					</section>
+					<section>
+						<h1>Option #2</h1>
+						<p>externalize via Facter</h3>
+<pre><code class=bash data-trim contenteditable>
+$ facter | head -n 5
+architecture => x86_64
+augeasversion => 1.0.0
+bios_release_date => 12/01/2006
+bios_vendor => innotek GmbH
+bios_version => VirtualBox
+</code></pre>
+						<p>can be defined as environment variables</p>
+<pre><code class=bash data-trim contenteditable>
+$ export FACTER_MYVAR=100
+$ facter | grep myvar
+myvar => 100
+</code></pre>
+						<p>or just put a file with key=value pairs in /etc/facter/fact.d</p>
+					</section>
+					<section>
+						<h1>Use facts</h1>
+<pre><code data-trim contenteditable>
+file { "/tmp/facts":
+    ensure  => present,
+    content => "$architecture $myvar",
+}
+</code></pre>
+					</section>
+				</section>
+				<section>
+					<h1>End</h1>
+					<p>* created with <a href="https://github.com/hakimel/reveal.js">reveal.js</a>
+					</p>
+				</section>
+
+		</div>
+		<!-- END OF SLIDES -->
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+		<script>
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					//{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					//{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					//{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+		</script>
+	</body>
+</html>
