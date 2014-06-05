@@ -308,24 +308,70 @@ node /^webserver-\d$/ {
 <p>* using ^$ is a best practice
 				</section>
 				<section>
+					<h1>Reusable modules</h1>
+					<a href="https://forge.puppetlabs.com/">https://forge.puppetlabs.com</a>
+				</section>
+				<section>
 					<section>
-						<h1>Templating</h1>
+						<h1>Inject Configuration</h1>
 					</section>
 					<section>
-						<h1>variable expansion</h1>
+						<h1>Option #1</h1>
+						<p>directly in manifest</p>
 <pre><code data-trim contenteditable>
-define httpd::conf($precedence, $subsystem) {
-    file { "/etc/httpd/conf.d/$precedence-$subsystem.conf":
+define myservice::auth($username, $password) {
+    file { "/etc/myservice/auth.conf":
         ensure  => present,
-        content => "# Configuring $subsystem",
+        content => "# This file is managed by puppet
+username=$username
+password=$password
+",
     }
 }
 
-httpd::conf { "configure my subsystem":
-    precedente => "100",
-    subsystem  => "ajp-proxy",
+myservice::auth { "configure myservice auth":
+    username => "myuser",
+	password => "somerandomwords",
 }
 </code></pre>
+					</section>
+					<section>
+						<h1>Option #2</h1>
+						<p>Facter</h3>
+<pre><code class=bash data-trim contenteditable>
+$ facter | head -n 5
+architecture => x86_64
+augeasversion => 1.0.0
+bios_release_date => 12/01/2006
+bios_vendor => innotek GmbH
+bios_version => VirtualBox
+</code></pre>
+					</section>
+					<section>
+						<h1>Custom facts</h1>
+						<p>can be defined as environment variables</p>
+<pre><code class=bash data-trim contenteditable>
+$ export FACTER_MYSERVICE_USERNAME=myuser
+$ facter | grep myvar
+myservice_username => myuser
+</code></pre>
+						<p>or just put a file with key=value pairs in /etc/facter/fact.d</p>
+<pre><code class=bash data-trim contenteditable>
+$ cat /etc/facter/facts.d/myservice.txt
+myserver_password=somerandomwords
+$ facter | grep password
+myserver_password=somerandomwords
+</code></pre>
+					</section>
+					<section>
+						<h1>Use custom facts</h1>
+<pre><code data-trim contenteditable>
+myservice::auth { "configure myservice auth":
+    username => "$::myservice_username",
+    password => "$::myservice_password",
+}
+</code></pre>
+<a href="http://docs.puppetlabs.com/guides/custom_facts.html">More about custom facts</a>
 					</section>
 					<section>
 						<h1>ERB templates</h1>
@@ -337,51 +383,27 @@ httpd::conf { "configure my subsystem":
 					</section>
 				</section>
 				<section>
-					<h1>Reusable modules</h1>
-					<p>checkout puppet forge</p>
-				</section>
-				<section>
 					<section>
-						<h1>Inject configuration values</h1>
+						<h1>Resources apply order</h1>
+						<p>* not specified</p>
 					</section>
 					<section>
-						<h1>Option #1</h1>
-						<p>directly in manifest</p>
-					</section>
-					<section>
-						<h1>Option #2</h1>
-						<p>externalize via Facter</h3>
-<pre><code class=bash data-trim contenteditable>
-$ facter | head -n 5
-architecture => x86_64
-augeasversion => 1.0.0
-bios_release_date => 12/01/2006
-bios_vendor => innotek GmbH
-bios_version => VirtualBox
-</code></pre>
-						<p>can be defined as environment variables</p>
-<pre><code class=bash data-trim contenteditable>
-$ export FACTER_MYVAR=100
-$ facter | grep myvar
-myvar => 100
-</code></pre>
-						<p>or just put a file with key=value pairs in /etc/facter/fact.d</p>
-					</section>
-					<section>
-						<h1>Use facts</h1>
+						<h1>Solution #1</h1>
+						<p>simple, clean and... wrong</p>
 <pre><code data-trim contenteditable>
-package { "glibc-$architecture":
-    ensure  => installed,
+package { 'httpd':
+    ensure  => latest,
+}
+
+service { 'httpd':
+    ensure  => running,
+    enable  => true,
 }
 </code></pre>
 					</section>
-				</section>
-				<section>
-					<h1>Resources apply order</h1>
-					<p>* not specified</p>
-				</section>
-				<section>
-					<h1>Explicit dependencies</h1>
+					<section>
+						<h1>Solution #2</h1>
+						<p>right but...</p>
 <pre><code data-trim contenteditable>
 package { 'httpd':
     ensure  => latest,
@@ -393,6 +415,7 @@ service { 'httpd':
     require => Package['httpd'],
 }
 </code></pre>
+					</section>
 				</section>
 				<section>
 					<section>
