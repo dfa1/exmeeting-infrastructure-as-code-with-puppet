@@ -24,7 +24,6 @@ class httpd {
 		ensure => present,
 	}
 
-
 }
 
 class httpd::enable_named_virtual_hosts {
@@ -75,7 +74,7 @@ define httpd::virtual_host($server_name) {
 
 class ntpd {
     package { 'ntp':
-        ensure        => present,
+        ensure        => latest,
         allow_virtual => false,
     }
 
