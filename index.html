@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>Infrastructure as code with Puppet</title>
+		<title>Infrastructure as Code with Puppet</title>
 		<meta name="description" content="Puppet introduction">
 		<meta name="author" content="Davide Angelocola">
 
@@ -36,8 +36,6 @@
 	<body>
 
 		<div class="reveal">
-
-			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
 					<h1>Infrastructure<br/> as<br/> Code</h1>
@@ -101,10 +99,11 @@
 				</section>
 				<section>
 					<h1>Stand-alone</h1>
+					<h1>Requirements</h1>
 					<ul>
 						<li>puppet binary</li>
-						<li>manifests copied locally</li>
-						<li>ssh connection</li>
+						<li>manifests</li>
+						<li>ssh server</li>
 					</ul>
 				</section>
 				<section>
@@ -523,6 +522,9 @@ service { 'httpd':
 }
 </code></pre>
 					</section>
+				</section>
+				<section>
+					<h1>One click deployment</h1>
 				</section>
 				<section>
 					<h1>End</h1>
