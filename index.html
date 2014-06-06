@@ -122,13 +122,11 @@ OK.
 				</section>
 				<section>
 <pre><code class=bash data-trim contenteditable>
-#/bin/bash
-set -e
-mkdir -p /root/.ssh
-chmod 700 /root/.ssh
+$ mkdir -p /root/.ssh
+$ chmod 700 /root/.ssh
 KEY='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDaTYviDJNv69jDzPWSIZFO0o+O884PmfeXiuk1OM6EAkTWPhUr1vB5ucG9ia49qnHWKi2k6uTdfMe4/GxCXXfC+F9R6GGd0lcHOvKWoNs16ZnDuZRqaG+2Hcic/t3OagT3rzXGg7uxGK3IeWGO12uteieaA2MDAqRJCBv5oAhh3Vk1+XMrMKxy/oF5KL46hgcIAAF4nFhCaMlk0T/xio7SRBif2I8IhyDmBgx2Ffag2xZwsoiTeeBzdbRgVKa3uGcFqfVtRvDfV92whB68J9DkRYsUE6AaWEAeL5NiIfiXAb9nUkjMWef/QGEZWbdz9qG2+y9bEr5egfbR0rso2vNl laptop_key'
-echo $KEY > /root/.ssh/authorized_keys
-chmod 600 /root/.ssh/authorized_keys
+$ echo $KEY >> /root/.ssh/authorized_keys
+$ chmod 600 /root/.ssh/authorized_keys
 # yeah... it looks like ssh-copy-id
 </code></pre>
 <h1>vs</h1>
