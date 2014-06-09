@@ -31,6 +31,7 @@
 		<!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
 		<![endif]-->
+
 	</head>
 
 	<body>
@@ -129,7 +130,7 @@ $ chmod 600 /root/.ssh/authorized_keys
 # yeah... it looks like ssh-copy-id
 </code></pre>
 <h1>vs</h1>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 ssh_authorized_key { 'laptop_dfa':
   ensure => present,
   user   => 'root',
@@ -140,7 +141,7 @@ ssh_authorized_key { 'laptop_dfa':
 				</section>
 				<section>
 					<h1>Resource</h1>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 # general syntax of a resource 
 type { unique_id:
     property1 => value1,
@@ -152,7 +153,7 @@ type { unique_id:
 				</section>
 				<section>
 					<h1>File</h1>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 file { "/var/www/index.html":
     ensure  => present,
     owner   => 'apache',
@@ -171,7 +172,7 @@ file { "/var/www/":
 				</section>
 				<section>
 					<h1>Package</h1>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 package { 'httpd-2.2':
     ensure => installed,
 }
@@ -187,7 +188,7 @@ package { 'java':
 				</section>
 				<section>
 					<h1>Service</h1>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 service { 'httpd':
     ensure => running,
     enable => true,
@@ -206,7 +207,7 @@ service { 'iptables':
 					</section>
 					<section>
 						<h1>User</h1>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 user { 'apache':
     ensure => present,
 }
@@ -214,7 +215,7 @@ user { 'apache':
 					</section>
 					<section>
 						<h1>Group</h1>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 group { 'apache':
     ensure => present,
 }
@@ -223,7 +224,7 @@ group { 'apache':
 					<section>
 						<h1>Host</h1>
 						<p>/etc/host entry</p>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 host { 'ntpserver.example.com':
     ip           => '10.100.10.50',
     host_aliases => 'timeserver',
@@ -233,7 +234,7 @@ host { 'ntpserver.example.com':
 					<section>
 						<h1>Cron</h1>
 						<p>/etc/crontab entry</p>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 cron { "backup cronjob":
   command => "/opt/myapp/backup",
   user    => root,
@@ -245,7 +246,7 @@ cron { "backup cronjob":
 					<section>
 						<h1>Mount</h1>
 						<p>/etc/fstab entry</p>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 mount { "/data":
     ensure  => "mounted",
     device  => "/dev/sdb1",
@@ -258,7 +259,7 @@ mount { "/data":
 					<section>
 						<h1>Tidy</h1>
 						<p>remove unwanted file by age/size</p>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 tidy { "tidy log logfiles":
     path    => "/var/log/myapp",
     age     => "60d",
@@ -270,7 +271,7 @@ tidy { "tidy log logfiles":
 					<section>
 						<h1>Exec</h1>
 						<p>execute external commands</p>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 exec { "untar dem-rules":
     command => "tar xvpf /tmp/dem-rules-$version.tar.gz -C /opt/dem/rules",
     path    => '/bin',
@@ -283,7 +284,7 @@ exec { "untar dem-rules":
 				</section>
 				<section>
 					<h1>Class</h1>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 class httpd {
 
     package { 'httpd':
@@ -301,7 +302,7 @@ include httpd
 				</section>
 				<section>
 					<h1>Define</h1>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 define httpd::virtual_host($server_name) {
     file { "/etc/httpd/conf.d/$server_name.conf":
         ensure  => file,
@@ -323,7 +324,7 @@ httpd::virtual_host { "my first virtualhost":
 				<section>
 					<h1>Node</h1>
 					<p>the main()</p>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 node 'pinocchio' {
     include httpd
     include httpd::enable_named_virtual_hosts
@@ -340,7 +341,7 @@ node 'pinocchio' {
 				</section>
 				<section>
 					<h1>Node regexp</h1>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 node /^webserver-\d$/ {
   include httpd
 }
@@ -358,7 +359,7 @@ node /^webserver-\d$/ {
 					<section>
 						<h1>Option #1</h1>
 						<p>directly in manifest</p>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 define myservice::auth($username, $password) {
     file { "/etc/myservice/auth.conf":
         ensure  => present,
@@ -405,7 +406,7 @@ myserver_password=somerandomwords
 					</section>
 					<section>
 						<h1>Use custom facts</h1>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 myservice::auth { "configure myservice auth":
     username => "$::myservice_username",
     password => "$::myservice_password",
@@ -430,7 +431,7 @@ myservice::auth { "configure myservice auth":
 					<section>
 						<h1>Solution #1</h1>
 						<p>simple, clean and... wrong</p>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 package { 'httpd':
     ensure  => latest,
 }
@@ -444,7 +445,7 @@ service { 'httpd':
 					<section>
 						<h1>Solution #2</h1>
 						<p>right but...</p>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 package { 'httpd':
     ensure  => latest,
 }
@@ -463,7 +464,7 @@ service { 'httpd':
 					</section>
 					<section>
 						<h3>subscribe</h3>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 package { 'httpd':
     ensure  => latest,
 }
@@ -477,7 +478,7 @@ service { 'httpd':
 					</section>
 					<section>
 						<h3>notify</h3>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 package { 'httpd':
     ensure => latest,
     notify => Service['httpd'],
@@ -491,7 +492,7 @@ service { 'httpd':
 					</section>
 					<section>
 						<h3>bonus: implicit dependency</h3>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 package { 'httpd':
     ensure => latest,
     notify => Service['httpd'],
@@ -507,7 +508,7 @@ service { 'httpd':
 					</section>
 					<section>
 						<h3>bonus: multiple events</h3>
-<pre><code data-trim contenteditable>
+<pre><code class=puppet data-trim contenteditable>
 package { 'httpd':
     ensure => latest,
 }
@@ -538,6 +539,11 @@ service { 'httpd':
 		</div>
 		<!-- END OF SLIDES -->
 
+		<!-- my customizations -->
+		<script src="plugin/highlight/bash.js"></script>
+		<script src="plugin/highlight/puppet.js"></script>
+
+		<!-- reveal setup -->
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.min.js"></script>
 		<script>
@@ -559,7 +565,13 @@ service { 'httpd':
 					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
 					//{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					//{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { 
+						var hljs = new create_hljs;
+						hljs.registerLanguage('bash', bash);
+						hljs.registerLanguage('puppet', puppet);
+						hljs.configure({'classPrefix': ''});
+						hljs.initHighlightingOnLoad();
+					} },
 					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
 					//{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
 				]

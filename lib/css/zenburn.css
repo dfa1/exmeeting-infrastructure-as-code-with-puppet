@@ -6,7 +6,8 @@ based on dark.css by Ivan Sagalaev
 */
 
 pre code {
-  display: block; padding: 0.5em;
+  display: block;
+  padding: 0.5em;
   background: #3F3F3F;
   color: #DCDCDC;
 }
@@ -32,6 +33,10 @@ pre .django .filter .argument {
 pre .number,
 pre .date {
   color: #8CD0D3;
+}
+
+pre .puppet .built_in {
+  color: #00BBCC;
 }
 
 pre .dos .envvar,
