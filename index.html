@@ -543,6 +543,22 @@ service { 'httpd':
 		<script src="plugin/highlight/bash.js"></script>
 		<script src="plugin/highlight/puppet.js"></script>
 
+		<script>
+			// shamlessy copied from reveal.js
+			(function() {
+				if (typeof window.addEventListener === 'function') {
+					var elements = document.querySelectorAll('pre code');
+					for (var i = 0, len = elements.length; i < len; i++ ) {
+						var element = elements[i];
+						var has_trim = typeof element.innerHTML.trim === 'function';
+						if (element.hasAttribute('data-trim') && has_trim)  {
+							element.innerHTML = element.innerHTML.trim();
+						}
+					}
+				}
+			})();
+		</script>
+
 		<!-- reveal setup -->
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.min.js"></script>
@@ -565,7 +581,7 @@ service { 'httpd':
 					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
 					//{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					//{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { 
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() {
 						var hljs = new create_hljs;
 						hljs.registerLanguage('bash', bash);
 						hljs.registerLanguage('puppet', puppet);
