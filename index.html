@@ -516,7 +516,7 @@ package { 'httpd':
 file { "/etc/httpd/conf.d/https.conf":
     ensure  => present,
     alias   => "https.conf",
-    content => ...,
+    content => "# the configuration",
 }
 
 service { 'httpd':
@@ -553,6 +553,9 @@ service { 'httpd':
 						var has_trim = typeof element.innerHTML.trim === 'function';
 						if (element.hasAttribute('data-trim') && has_trim)  {
 							element.innerHTML = element.innerHTML.trim();
+						}
+						if (!element.hasAttribute('data-noescape')) {
+							element.innerHTML = element.innerHTML.replace(/</g,"&lt;").replace(/>/g,"&gt;");
 						}
 					}
 				}
