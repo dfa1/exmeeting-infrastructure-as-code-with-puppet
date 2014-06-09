@@ -206,6 +206,7 @@ service { 'iptables':
 					</section>
 					<section>
 						<h1>User</h1>
+						<p>/etc/passwd entry</p>
 <pre><code class=puppet data-trim contenteditable>
 user { 'apache':
     ensure => present,
@@ -214,6 +215,7 @@ user { 'apache':
 					</section>
 					<section>
 						<h1>Group</h1>
+						<p>/etc/group entry</p>
 <pre><code class=puppet data-trim contenteditable>
 group { 'apache':
     ensure => present,
@@ -222,7 +224,7 @@ group { 'apache':
 					</section>
 					<section>
 						<h1>Host</h1>
-						<p>/etc/host entry</p>
+						<p>/etc/hosts entry</p>
 <pre><code class=puppet data-trim contenteditable>
 host { 'ntpserver.example.com':
     ip           => '10.100.10.50',
