@@ -304,10 +304,10 @@ include httpd
 				<section>
 					<h1>Define</h1>
 <pre><code class=puppet data-trim contenteditable>
-define httpd::virtual_host($server_name) {
+define httpd::virtual_host($server_name, $owner='root') {
     file { "/etc/httpd/conf.d/$server_name.conf":
         ensure  => file,
-        owner   => root,
+        owner   => $owner,
         group   => root,
         mode    => 400,
         content => "# This file is managed by puppet
@@ -434,12 +434,9 @@ myservice::auth { "configure myservice auth":
 				</section>
 				<section>
 					<section>
-						<h1>Resources apply order</h1>
-						<p>* not specified</p>
+						<h1>Dependencies</h1>
 					</section>
 					<section>
-						<h1>Solution #1</h1>
-						<p>simple, clean and... wrong</p>
 <pre><code class=puppet data-trim contenteditable>
 package { 'httpd':
     ensure  => latest,
@@ -452,8 +449,7 @@ service { 'httpd':
 </code></pre>
 					</section>
 					<section>
-						<h1>Solution #2</h1>
-						<p>right but...</p>
+						<h1>Require</h1>
 <pre><code class=puppet data-trim contenteditable>
 package { 'httpd':
     ensure  => latest,
@@ -470,6 +466,9 @@ service { 'httpd':
 				<section>
 					<section>
 						<h1>Reactive manifests</h1>
+					</section>
+					<section>
+						<h1>Events</h1>
 					</section>
 					<section>
 						<h3>subscribe</h3>
@@ -500,7 +499,7 @@ service { 'httpd':
 </code></pre>
 					</section>
 					<section>
-						<h3>bonus: implicit dependency</h3>
+						<h3>implicit dependency</h3>
 <pre><code class=puppet data-trim contenteditable>
 package { 'httpd':
     ensure => latest,
@@ -516,7 +515,7 @@ service { 'httpd':
 </code></pre>
 					</section>
 					<section>
-						<h3>bonus: multiple events</h3>
+						<h3>multiple events</h3>
 <pre><code class=puppet data-trim contenteditable>
 package { 'httpd':
     ensure => latest,
