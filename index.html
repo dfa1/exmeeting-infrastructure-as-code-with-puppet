@@ -385,6 +385,13 @@ bios_release_date => 12/01/2006
 bios_vendor => innotek GmbH
 bios_version => VirtualBox
 </code></pre>
+					<p>example:</p>
+<pre><code class=puppet data-trim contenteditable>
+package { "httpd-$::architecture":
+    ensure => installed,
+}
+</code></pre>
+
 					</section>
 					<section>
 						<h1>Custom facts</h1>
