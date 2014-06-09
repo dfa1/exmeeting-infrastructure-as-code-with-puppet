@@ -124,7 +124,7 @@ OK.
 <pre><code class=bash data-trim contenteditable>
 $ mkdir -p /root/.ssh
 $ chmod 700 /root/.ssh
-KEY='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAA ... blahblahblah laptop_key'
+KEY='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAA... laptop_key'
 $ echo $KEY >> /root/.ssh/authorized_keys
 $ chmod 600 /root/.ssh/authorized_keys
 # yeah... it looks like ssh-copy-id
@@ -135,7 +135,7 @@ ssh_authorized_key { 'laptop_dfa':
   ensure => present,
   user   => 'root',
   type   => 'ssh-rsa',
-  key    => 'AAAAB3NzaC1yc2EAAAADAQABAAA ... blahblahblah laptop_key'
+  key    => 'AAAAB3NzaC1yc2EAAAADAQABAAA... laptop_key'
 }
 </code></pre>
 				</section>
