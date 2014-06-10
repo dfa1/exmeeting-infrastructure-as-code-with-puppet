@@ -66,8 +66,7 @@ define httpd::virtual_host($server_name) {
         owner  => 'apache',
         group  => 'apache',
         mode   => 0750,
-        content => "Hello, I'm $server_name
-",
+        content => "Hello, I'm $server_name\n",
     }
 
 }
