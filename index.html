@@ -123,17 +123,17 @@ OK.
 <pre><code class=bash data-trim contenteditable>
 $ mkdir -p /root/.ssh
 $ chmod 700 /root/.ssh
-KEY='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAA... laptop_key'
+$ KEY='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAA... laptop_key'
 $ echo $KEY > /root/.ssh/authorized_keys
 $ chmod 600 /root/.ssh/authorized_keys
 </code></pre>
 <h1>vs</h1>
 <pre><code class=puppet data-trim contenteditable>
-ssh_authorized_key { 'laptop_dfa':
+ssh_authorized_key { 'laptop_key':
   ensure => present,
   user   => 'root',
   type   => 'ssh-rsa',
-  key    => 'AAAAB3NzaC1yc2EAAAADAQABAAA... laptop_key'
+  key    => 'AAAAB3NzaC1yc2EAAAADAQABAAA...',
 }
 </code></pre>
 				</section>
