@@ -172,7 +172,7 @@ file { "/var/www/":
 				<section>
 					<h1>Package</h1>
 <pre><code class=puppet data-trim contenteditable>
-package { 'httpd-2.2':
+package { 'httpd':
     ensure => installed,
 }
 
@@ -181,6 +181,10 @@ package { 'nginx':
 }
 
 package { 'java':
+    ensure => '1.6',
+}
+
+package { 'libssl':
     ensure => latest,
 }
 </code></pre>
