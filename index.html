@@ -124,9 +124,8 @@ OK.
 $ mkdir -p /root/.ssh
 $ chmod 700 /root/.ssh
 KEY='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAA... laptop_key'
-$ echo $KEY >> /root/.ssh/authorized_keys
+$ echo $KEY > /root/.ssh/authorized_keys
 $ chmod 600 /root/.ssh/authorized_keys
-# yeah... it looks like ssh-copy-id
 </code></pre>
 <h1>vs</h1>
 <pre><code class=puppet data-trim contenteditable>
